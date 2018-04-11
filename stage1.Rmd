@@ -1,0 +1,34 @@
+---
+title: "R Notebook of Stage 1"
+output: html_notebook
+---
+
+```{r}
+library("httr")
+library("readxl")
+GET("https://query.data.world/s/dlkmf3mbsdy6s4mlcc5yitor4rnfmh", write_disk(tf <- tempfile(fileext = ".xls")))
+df <- read_excel(tf)
+View(df)
+df<-as.data.frame(df)
+dimnames(df)[[2]]<-df[1,]
+df<-df[-1,]
+```
+```{r}
+sum(is.na(df[,7]))
+sum(is.na(df[,8]))
+sum(is.na(df[,9]))
+df<-df[!is.na(df[,8]),]
+df<-df[!is.na(df[,9]),]
+```
+```{r}
+typeof(df$"C2) Funding FY2009")
+df$"C2) Funding FY2009"<-as.numeric(unlist(df$"C2) Funding FY2009"))
+typeof(df$"C2) Funding FY2009")
+```
+```{r}
+typeof(df$"C3) Funding FY2010")
+df$"C3) Funding FY2010"<-as.numeric(unlist(df$"C3) Funding FY2010"))
+typeof(df$"C3) Funding FY2010")
+df$growth<-(df$"C3) Funding FY2010" - df$"C2) Funding FY2009")/df$"C2) Funding FY2009"
+df$target<-ifelse(df$growth >= 0, 1, 0)
+```
